@@ -31,7 +31,10 @@ app.post('/tasks', async (req, res) => {
 
 // PATCH /tasks/:id — update a task (complete/uncomplete or rename)
 app.patch('/tasks/:id', async (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = Number(req.params.id);
+  if (!/^[1-9]\d*$/.test(req.params.id) || !Number.isSafeInteger(id) || id > 2147483647) {
+    return res.status(400).json({ error: 'id must be a positive integer' });
+  }
   const { completed, title } = req.body;
 
   const { rows } = await db.query('SELECT * FROM tasks WHERE id = $1', [id]);
