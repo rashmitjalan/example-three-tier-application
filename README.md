@@ -65,6 +65,7 @@ The API is not exposed directly, but you can reach it through the web container 
 | GET | `/tasks` | List all tasks |
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
+| DELETE | `/tasks/:id` | Delete a task (204 on success, 404 if not found) |
 
 ## Project structure
 
