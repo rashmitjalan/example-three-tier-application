@@ -66,6 +66,18 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+## Running tests
+
+The API does not have tests yet. The `test` script in `src/api/package.json` is the npm placeholder, so `npm test` currently exits with `Error: no test specified`.
+
+Once API tests are added, run them with:
+
+```bash
+cd src/api
+npm ci
+npm test
+```
+
 ## Project structure
 
 ```
