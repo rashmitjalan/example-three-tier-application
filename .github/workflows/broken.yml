@@ -1,0 +1,9 @@
+# Intentional invalid YAML to make CI fail.
+name: Broken
+on: [push
+jobs:
+  broken:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "this workflow file does not parse"
+        with: { unclosed: [1, 2
