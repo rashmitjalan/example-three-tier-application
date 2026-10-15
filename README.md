@@ -66,6 +66,10 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+### Health endpoint behavior
+
+`GET /health` responds with HTTP 200 and the JSON body `{"status":"ok"}`. It does not query PostgreSQL. It is a liveness check that shows the API process is running, not a database readiness check. It can return `ok` while the database is unavailable.
+
 ## Project structure
 
 ```
