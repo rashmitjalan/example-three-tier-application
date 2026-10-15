@@ -66,6 +66,8 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+`GET /health` is a liveness check. It returns `200 OK` with the JSON body `{"status":"ok"}` and does not query the database. Compose only `expose`s the API, so to test from the host, either run the API directly (`cd src/api && PORT=3001 npm run dev`) or temporarily add `ports: ["3001:3001"]` to the `api` service, then run `curl http://localhost:3001/health`.
+
 ## Project structure
 
 ```
