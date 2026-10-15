@@ -135,3 +135,4 @@ When running via Docker Compose the `migrate` service handles this automatically
 
 <!-- Wiki 914925f freshness check 2026-10-15T07:26:39.382543+00:00 -->
 <!-- PR16 merge demo -->
+<!-- PR16 title update -->
