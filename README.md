@@ -24,6 +24,8 @@ Changes can be reviewed in a pull request.
 
 Thanks for reviewing.
 
+Review feedback is welcome.
+
 ## Running locally with Docker Compose
 
 ### Prerequisites
