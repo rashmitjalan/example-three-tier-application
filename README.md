@@ -18,6 +18,14 @@ Browser → Web (Next.js :3000) → API (Express :3001) → PostgreSQL
 
 The app is a simple task manager (to-do list) that demonstrates how the three tiers communicate.
 
+This demo is used for Forge acceptance checks.
+
+Changes can be reviewed in a pull request.
+
+Thanks for reviewing.
+
+Review feedback is welcome.
+
 ## Running locally with Docker Compose
 
 ### Prerequisites
