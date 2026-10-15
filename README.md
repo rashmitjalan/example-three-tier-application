@@ -135,3 +135,4 @@ When running via Docker Compose the `migrate` service handles this automatically
 
 <!-- Wiki 914925f freshness check 2026-10-15T07:26:39.382543+00:00 -->
 <!-- PR15 nonqueued e76bb25 -->
+<!-- PR15 queued e76bb25 -->
