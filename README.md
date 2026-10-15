@@ -20,6 +20,8 @@ The app is a simple task manager (to-do list) that demonstrates how the three ti
 
 This demo is used for Forge acceptance checks.
 
+Changes can be reviewed in a pull request.
+
 ## Running locally with Docker Compose
 
 ### Prerequisites
