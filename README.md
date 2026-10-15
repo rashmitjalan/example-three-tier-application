@@ -22,6 +22,8 @@ This demo is used for Forge acceptance checks.
 
 Changes can be reviewed in a pull request.
 
+Thanks for reviewing.
+
 ## Running locally with Docker Compose
 
 ### Prerequisites
