@@ -133,3 +133,4 @@ When running via Docker Compose the `migrate` service handles this automatically
 
 <!-- Forge Wiki v2 freshness live-check 2026-10-15 -->
 <!-- PR15 nonqueued 1548736 -->
+<!-- PR15 queued 1548736 -->
