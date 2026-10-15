@@ -52,3 +52,7 @@ The backend has no automated test runner yet. The `test` scripts in `src/api` an
 ## Limits of the sandbox
 
 See the wiki page "Postgres sandbox workaround" for the exact error and the safe workaround.
+
+## Wiki reference
+
+The project wiki page "Postgres sandbox workaround" records the exact `ECONNREFUSED 127.0.0.1:5432` symptom, the command that reproduces it, and the safe workaround. The database checks in this note remain NOT RUN until they are executed against a real PostgreSQL 17 instance in CI or locally.
