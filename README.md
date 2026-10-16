@@ -66,6 +66,14 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+### Attachment health
+
+`GET /attachment-health` returns a fixed response that confirms the attachment health route is wired up:
+
+```json
+{ "ok": true, "marker": "maple-lantern-73" }
+```
+
 ## Project structure
 
 ```
