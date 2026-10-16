@@ -66,6 +66,8 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+PATCH returns `400 {"error": "..."}` for an invalid id, a non-object body, a non-boolean `completed`, or an empty or over-500-character `title`.
+
 ## Project structure
 
 ```
