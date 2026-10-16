@@ -18,13 +18,17 @@ app.get('/tasks', async (_req, res) => {
 
 // POST /tasks — create a task
 app.post('/tasks', async (req, res) => {
-  const { title } = req.body;
+  const { title } = req.body ?? {};
   if (!title || typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ error: 'title is required' });
   }
+  const trimmed = title.trim();
+  if (trimmed.length > 500) {
+    return res.status(400).json({ error: 'title must be at most 500 characters' });
+  }
   const { rows } = await db.query(
     'INSERT INTO tasks (title) VALUES ($1) RETURNING *',
-    [title.trim()]
+    [trimmed]
   );
   res.status(201).json(rows[0]);
 });
