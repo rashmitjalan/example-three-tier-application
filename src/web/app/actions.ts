@@ -17,21 +17,36 @@ export async function getTasks(): Promise<Task[]> {
   return res.json();
 }
 
+// Throws with the API's `{ error }` message when the response is not OK.
+async function ensureOk(res: Response, fallback: string) {
+  if (res.ok) return;
+  let message = fallback;
+  try {
+    const body = await res.json();
+    if (body && typeof body.error === 'string') message = body.error;
+  } catch {
+    // Non-JSON error body; keep the fallback message.
+  }
+  throw new Error(`${message} (HTTP ${res.status})`);
+}
+
 export async function createTask(formData: FormData) {
   const title = formData.get('title') as string;
-  await fetch(`${API_URL}/tasks`, {
+  const res = await fetch(`${API_URL}/tasks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title }),
   });
+  await ensureOk(res, 'Failed to create task');
   revalidatePath('/');
 }
 
 export async function toggleTask(id: number, completed: boolean) {
-  await fetch(`${API_URL}/tasks/${id}`, {
+  const res = await fetch(`${API_URL}/tasks/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ completed }),
   });
+  await ensureOk(res, 'Failed to update task');
   revalidatePath('/');
 }
