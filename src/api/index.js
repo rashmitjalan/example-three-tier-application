@@ -4,6 +4,7 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const MAX_TITLE_LENGTH = 500; // matches tasks.title varchar(500)
+const MAX_ID = 2147483647; // max value of a Postgres serial (int4)
 
 app.use(express.json());
 
@@ -41,10 +42,11 @@ app.post('/tasks', async (req, res) => {
 
 // PATCH /tasks/:id — update a task (complete/uncomplete or rename)
 app.patch('/tasks/:id', async (req, res) => {
-  if (!/^\d+$/.test(req.params.id)) {
+  const id = parseInt(req.params.id, 10);
+  // tasks.id is a serial (int4), so larger values would make Postgres error out.
+  if (!/^\d+$/.test(req.params.id) || id < 1 || id > MAX_ID) {
     return res.status(400).json({ error: 'id must be a positive integer' });
   }
-  const id = parseInt(req.params.id, 10);
   const { completed, title } = req.body ?? {};
 
   if (completed !== undefined && typeof completed !== 'boolean') {
