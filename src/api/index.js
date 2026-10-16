@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./db');
+const attachmentHealth = require('./attachmentHealth');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -8,6 +9,11 @@ app.use(express.json());
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
+});
+
+// GET /attachment-health — attachment smoke check
+app.get('/attachment-health', (_req, res) => {
+  res.json(attachmentHealth());
 });
 
 // GET /tasks — list all tasks
