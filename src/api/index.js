@@ -18,6 +18,8 @@ app.get('/tasks', async (_req, res) => {
 
 // POST /tasks — create a task
 app.post('/tasks', async (req, res) => {
+  // REVIEW: if the request has no body, req.body is undefined and this destructuring throws, so the client gets a 500 HTML page.
+  // Suggested fix: const { title } = req.body ?? {};
   const { title } = req.body;
   if (!title || typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ error: 'title is required' });
@@ -55,6 +57,9 @@ app.patch('/tasks/:id', async (req, res) => {
     }
   }
 
+  // REVIEW: this read and the UPDATE below are separate queries with no transaction.
+  // Two concurrent PATCHes can each read the old row and overwrite each other's changes.
+  // Suggested fix: a single UPDATE ... SET completed = COALESCE($1, completed), title = COALESCE($2, title) WHERE id = $3 RETURNING *
   const { rows } = await db.query('SELECT * FROM tasks WHERE id = $1', [id]);
   if (rows.length === 0) return res.status(404).json({ error: 'Not found' });
 
