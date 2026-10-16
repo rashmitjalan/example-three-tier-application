@@ -65,6 +65,20 @@ The API is not exposed directly, but you can reach it through the web container 
 | GET | `/tasks` | List all tasks |
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
+| DELETE | `/tasks/:id` | Delete a task (204 No Content on success, 404 if not found) |
+
+Example requests, assuming the API is reachable at `http://localhost:3001` (for example by temporarily adding `- "3001:3001"` under the `api` service's `ports:`):
+
+```bash
+# Delete an existing task: prints 204 and no body
+curl -s -o /dev/null -w '%{http_code}\n' -X DELETE http://localhost:3001/tasks/1
+# 204
+
+# Delete it again (or an id that never existed): prints 404 and {"error":"Not found"}
+curl -si -X DELETE http://localhost:3001/tasks/1
+# HTTP/1.1 404 Not Found
+# {"error":"Not found"}
+```
 
 ## Project structure
 
