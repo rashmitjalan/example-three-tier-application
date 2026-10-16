@@ -18,8 +18,10 @@ app.get('/tasks', async (_req, res) => {
 
 // POST /tasks — create a task
 app.post('/tasks', async (req, res) => {
-  // REVIEW: if the request has no body, req.body is undefined and this destructuring throws, so the client gets a 500 HTML page.
-  // Suggested fix: const { title } = req.body ?? {};
+  // REVIEW (suggestion): with no body, req.body is undefined and this destructuring throws -> 500 HTML page.
+  // Suggested change:
+  //   - const { title } = req.body;
+  //   + const { title } = req.body ?? {};
   const { title } = req.body;
   if (!title || typeof title !== 'string' || !title.trim()) {
     return res.status(400).json({ error: 'title is required' });
@@ -34,12 +36,18 @@ app.post('/tasks', async (req, res) => {
 // PATCH /tasks/:id — update a task (complete/uncomplete or rename)
 app.patch('/tasks/:id', async (req, res) => {
   // id is a Postgres serial (int4): reject anything that is not a positive 32-bit integer
+  // REVIEW (suggestion, nit): Number(req.params.id) is computed three times. Convert once and reuse:
+  //   + const id = Number(req.params.id);
+  //   + if (!/^\d+$/.test(req.params.id) || id < 1 || id > 2147483647) { ... }
   if (!/^\d+$/.test(req.params.id) || Number(req.params.id) < 1 || Number(req.params.id) > 2147483647) {
     return res.status(400).json({ error: 'id must be a positive integer' });
   }
   const id = Number(req.params.id);
 
   const body = req.body;
+  // REVIEW (suggestion, nit): a body of null or "x" is rejected earlier by the JSON parser with
+  // "request body must be valid JSON", which is misleading for null. Consider a wording such as
+  // "request body must be a JSON object" in the parse-error handler below.
   if (body === null || typeof body !== 'object' || Array.isArray(body)) {
     return res.status(400).json({ error: 'request body must be a JSON object' });
   }
@@ -57,9 +65,15 @@ app.patch('/tasks/:id', async (req, res) => {
     }
   }
 
-  // REVIEW: this read and the UPDATE below are separate queries with no transaction.
+  // REVIEW (suggestion): this SELECT and the UPDATE below are separate queries with no transaction.
   // Two concurrent PATCHes can each read the old row and overwrite each other's changes.
-  // Suggested fix: a single UPDATE ... SET completed = COALESCE($1, completed), title = COALESCE($2, title) WHERE id = $3 RETURNING *
+  // Suggested change: replace both queries with one atomic statement, and return 404 if rows is empty:
+  //   + const { rows } = await db.query(
+  //   +   'UPDATE tasks SET completed = COALESCE($1, completed), title = COALESCE($2, title) WHERE id = $3 RETURNING *',
+  //   +   [completed ?? null, title !== undefined ? title.trim() : null, id]
+  //   + );
+  //   + if (rows.length === 0) return res.status(404).json({ error: 'Not found' });
+  //   + res.json(rows[0]);
   const { rows } = await db.query('SELECT * FROM tasks WHERE id = $1', [id]);
   if (rows.length === 0) return res.status(404).json({ error: 'Not found' });
 
