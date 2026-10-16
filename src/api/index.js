@@ -3,8 +3,19 @@ const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const MAX_TITLE_LENGTH = 500; // matches tasks.title varchar(500)
+const MAX_ID = 2147483647; // max value of a Postgres serial (int4)
 
 app.use(express.json());
+
+// Returns an error message for an invalid title, or null when it is valid.
+function validateTitle(title) {
+  if (typeof title !== 'string' || !title.trim()) return 'title is required';
+  if (title.trim().length > MAX_TITLE_LENGTH) {
+    return `title must be at most ${MAX_TITLE_LENGTH} characters`;
+  }
+  return null;
+}
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
@@ -18,10 +29,10 @@ app.get('/tasks', async (_req, res) => {
 
 // POST /tasks — create a task
 app.post('/tasks', async (req, res) => {
-  const { title } = req.body;
-  if (!title || typeof title !== 'string' || !title.trim()) {
-    return res.status(400).json({ error: 'title is required' });
-  }
+  const { title } = req.body ?? {};
+  const titleError = validateTitle(title);
+  if (titleError) return res.status(400).json({ error: titleError });
+
   const { rows } = await db.query(
     'INSERT INTO tasks (title) VALUES ($1) RETURNING *',
     [title.trim()]
@@ -32,13 +43,25 @@ app.post('/tasks', async (req, res) => {
 // PATCH /tasks/:id — update a task (complete/uncomplete or rename)
 app.patch('/tasks/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { completed, title } = req.body;
+  // tasks.id is a serial (int4), so larger values would make Postgres error out.
+  if (!/^\d+$/.test(req.params.id) || id < 1 || id > MAX_ID) {
+    return res.status(400).json({ error: 'id must be a positive integer' });
+  }
+  const { completed, title } = req.body ?? {};
+
+  if (completed !== undefined && typeof completed !== 'boolean') {
+    return res.status(400).json({ error: 'completed must be a boolean' });
+  }
+  if (title !== undefined) {
+    const titleError = validateTitle(title);
+    if (titleError) return res.status(400).json({ error: titleError });
+  }
 
   const { rows } = await db.query('SELECT * FROM tasks WHERE id = $1', [id]);
   if (rows.length === 0) return res.status(404).json({ error: 'Not found' });
 
   const current = rows[0];
-  const newCompleted = completed !== undefined ? Boolean(completed) : current.completed;
+  const newCompleted = completed !== undefined ? completed : current.completed;
   const newTitle = title !== undefined ? title.trim() : current.title;
 
   const { rows: updated } = await db.query(
@@ -46,6 +69,18 @@ app.patch('/tasks/:id', async (req, res) => {
     [newCompleted, newTitle, id]
   );
   res.json(updated[0]);
+});
+
+// Error handler — Express 5 forwards rejected async handlers here.
+// Always respond with JSON instead of the default HTML error page.
+app.use((err, _req, res, next) => {
+  if (res.headersSent) return next(err);
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'Malformed JSON body' });
+  }
+  const status = err.status >= 400 && err.status < 500 ? err.status : 500;
+  if (status === 500) console.error(err);
+  res.status(status).json({ error: status === 500 ? 'Internal server error' : err.message });
 });
 
 app.listen(PORT, () => {
