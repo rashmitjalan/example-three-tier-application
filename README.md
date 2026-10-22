@@ -86,6 +86,27 @@ src/
     └── outputs.tf
 ```
 
+## Utilities
+
+### `slugify(text)`
+
+`utils/slugify.js` converts text to a URL-friendly slug: it lowercases, trims whitespace, replaces each run of non-alphanumeric characters with a single hyphen, and removes leading/trailing hyphens.
+
+```js
+const { slugify } = require('./utils/slugify');
+
+slugify('Hello, World!');   // 'hello-world'
+slugify('  Node 22 Rocks '); // 'node-22-rocks'
+slugify('---');             // ''
+slugify('');                // ''
+```
+
+Run its tests with the Node built-in test runner (no dependencies needed):
+
+```bash
+node --test utils/slugify.test.js
+```
+
 ## Deploying to GCP
 
 The `src/infrastructure/` directory contains Terraform that provisions:
