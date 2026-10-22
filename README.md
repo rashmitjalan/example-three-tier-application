@@ -131,6 +131,25 @@ DATABASE_URL=postgres://app:app@localhost:5432/app npx node-pg-migrate down
 
 When running via Docker Compose the `migrate` service handles this automatically on startup.
 
+## Slugify utility
+
+`utils/slugify.js` exports `slugify(text)`, which turns text into a URL-friendly slug. It lowercases the text, trims whitespace, replaces each run of non-alphanumeric characters with a single hyphen, and removes leading and trailing hyphens.
+
+```js
+const { slugify } = require('./utils/slugify');
+
+slugify('Hello, World!');        // 'hello-world'
+slugify('  Top 10 Tips (2024) '); // 'top-10-tips-2024'
+slugify('--Hello   World--');    // 'hello-world'
+slugify('');                     // ''
+```
+
+Run its tests (Node's built-in test runner, no dependencies needed):
+
+```bash
+node --test utils/slugify.test.js
+```
+
 <!-- Forge Wiki v2 freshness live-check 2026-10-15 -->
 
 <!-- Wiki 914925f freshness check 2026-10-15T07:26:39.382543+00:00 -->
