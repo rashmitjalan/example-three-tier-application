@@ -57,7 +57,7 @@ docker compose up --build
 
 ### API endpoints
 
-API listens on port 3001.
+API listens on port 3001. The API port can be overridden for local development.
 
 The API is not exposed directly, but you can reach it through the web container or by temporarily mapping its port:
 
