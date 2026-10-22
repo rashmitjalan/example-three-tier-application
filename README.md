@@ -1,3 +1,5 @@
+Final eval smoke: README change.
+
 # Example Three-Tier Application
 
 A reference implementation of a three-tier web application: a Next.js frontend, an Express REST API, and a PostgreSQL database. It runs locally with Docker Compose and deploys to Google Cloud Platform (Cloud Run + Cloud SQL) via Terraform.
@@ -138,3 +140,4 @@ When running via Docker Compose the `migrate` service handles this automatically
 <!-- PR16 title update -->
 <!-- PR16 final verification -->
 <!-- PR17 cost route -->
+Final eval smoke complete.
