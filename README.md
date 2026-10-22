@@ -66,6 +66,8 @@ The API is not exposed directly, but you can reach it through the web container 
 | POST | `/tasks` | Create a task (`{ "title": "..." }`) |
 | PATCH | `/tasks/:id` | Update a task (`{ "completed": true }` or `{ "title": "..." }`) |
 
+Tasks titles are limited to 500 characters.
+
 ## Project structure
 
 ```
