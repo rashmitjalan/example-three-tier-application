@@ -59,6 +59,8 @@ docker compose up --build
 
 API listens on port 3001.
 
+Run docker compose up to start.
+
 The API is not exposed directly, but you can reach it through the web container or by temporarily mapping its port:
 
 | Method | Path | Description |
