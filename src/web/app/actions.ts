@@ -19,11 +19,15 @@ export async function getTasks(): Promise<Task[]> {
 
 export async function createTask(formData: FormData) {
   const title = formData.get('title') as string;
-  await fetch(`${API_URL}/tasks`, {
+  const res = await fetch(`${API_URL}/tasks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title }),
   });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.error ?? `Failed to create task (${res.status})`);
+  }
   revalidatePath('/');
 }
 
