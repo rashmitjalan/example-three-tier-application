@@ -1,3 +1,4 @@
+MAIN B1 smoke
 Final eval smoke: README change.
 
 # Example Three-Tier Application
