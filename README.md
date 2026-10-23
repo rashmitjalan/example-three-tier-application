@@ -1,4 +1,5 @@
 Final eval smoke: README change.
+Final main smoke: R1 ambiguity guard verified.
 
 # Example Three-Tier Application
 
