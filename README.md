@@ -1,4 +1,5 @@
 Final eval smoke: README change.
+Smoke check: merged sharing and cleanup.
 
 # Example Three-Tier Application
 
