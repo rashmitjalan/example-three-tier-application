@@ -32,10 +32,14 @@ export async function createTask(formData: FormData) {
 }
 
 export async function toggleTask(id: number, completed: boolean) {
-  await fetch(`${API_URL}/tasks/${id}`, {
+  const res = await fetch(`${API_URL}/tasks/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ completed }),
   });
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new Error(body?.error ?? `Failed to update task (${res.status})`);
+  }
   revalidatePath('/');
 }
