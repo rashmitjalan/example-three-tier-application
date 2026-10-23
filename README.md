@@ -137,6 +137,8 @@ When running via Docker Compose the `migrate` service handles this automatically
 
 Contributing: keep each change focused.
 
+Validation: run the relevant checks before opening a pull request.
+
 <!-- Forge Wiki v2 freshness live-check 2026-10-15 -->
 
 <!-- Wiki 914925f freshness check 2026-10-15T07:26:39.382543+00:00 -->
