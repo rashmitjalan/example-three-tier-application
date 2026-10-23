@@ -14,3 +14,5 @@ jobs:
       - run: npm ci
         working-directory: src/api
       - run: for f in $(git ls-files 'src/api/*.js'); do node --check "$f"; done
+      - run: npm test
+        working-directory: src/api
