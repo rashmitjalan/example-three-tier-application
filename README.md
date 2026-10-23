@@ -133,6 +133,8 @@ DATABASE_URL=postgres://app:app@localhost:5432/app npx node-pg-migrate down
 
 When running via Docker Compose the `migrate` service handles this automatically on startup.
 
+Contributing: keep each change focused.
+
 <!-- Forge Wiki v2 freshness live-check 2026-10-15 -->
 
 <!-- Wiki 914925f freshness check 2026-10-15T07:26:39.382543+00:00 -->
