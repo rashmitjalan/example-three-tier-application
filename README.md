@@ -142,3 +142,4 @@ When running via Docker Compose the `migrate` service handles this automatically
 <!-- PR17 cost route -->
 Final eval smoke complete.
 <!-- dockerode5 check -->
+<!-- dockerode5 heredoc -->
