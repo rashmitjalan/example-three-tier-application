@@ -1,3 +1,3 @@
 "use strict";
-const ciFixProbe = ;
+const ciFixProbe = "forge-ci-smoke";
 module.exports = ciFixProbe;
